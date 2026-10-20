@@ -1,0 +1,75 @@
+@startuml FilmNow
+left to right direction
+skinparam backgroundColor #121212
+skinparam shadowing false
+skinparam ArrowColor #BBBBBB
+skinparam ClassBackgroundColor #1E1E1E
+skinparam ClassBorderColor #4A4A4A
+skinparam ClassFontColor #E8E8E8
+skinparam ClassAttributeFontColor #E8E8E8
+skinparam ClassStereotypeFontColor #90CAF9
+skinparam ClassHeaderBackgroundColor #2A2A2A
+skinparam ClassFontSize 14
+skinparam ClassHeaderFontSize 17
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 110
+skinparam ranksep 80
+skinparam roundCorner 12
+
+class FilmNow {
+  - filmes : Filme[100]
+  - hotList : Filme[10]
+  + FilmNow()
+  + getFilmes() : Filme[]
+  + getFilme(posicao: int) : Filme
+  + cadastraFilme(posicao: int, nome: String, ano: String, local: String) : boolean
+  + adicionaHot(filme: Filme, posicao: int) : void
+  + removeHot(posicao: int) : void
+  + removeHot(filme: Filme) : void
+  + contemHot(filme: Filme) : boolean
+  + listaHots() : String
+}
+
+class Filme {
+  - nome : String
+  - ano : String
+  - local : String
+  + Filme(nome: String, ano: String, local: String)
+  + getNome() : String
+  + getAno() : String
+  + getLocal() : String
+  + equals(obj: Object) : boolean
+  + toString() : String
+}
+
+class LeitorFilmNow {
+  + carregaContatos(arquivoFilmes: String, fn: FilmNow) : int
+  - processaLinhaCsvFilmes(campos: String[], fn: FilmNow) : void
+}
+
+class MainFilmNow {
+  + main(args: String[]) : void
+  - menu(scanner: Scanner) : String
+  - comando(opcao: String, fn: FilmNow, scanner: Scanner) : void
+  - mostrarFilmes(fn: FilmNow) : void
+  - detalharFilme(fn: FilmNow, scanner: Scanner) : void
+  - exibirHotList(fn: FilmNow) : void
+  - adicionaFilme(fn: FilmNow, scanner: Scanner) : void
+  - atribuirHot(fn: FilmNow, scanner: Scanner) : void
+  - removerHot(fn: FilmNow, scanner: Scanner) : void
+  - formataFilme(posicao: int, filme: Filme) : String
+  - sai() : void
+  - leInteiro(texto: String) : int
+  - carregaFilmes(arquivoFilmes: String, fn: FilmNow) : void
+}
+
+FilmNow "1" *-- "100" Filme
+FilmNow "1" *-- "10" Filme
+LeitorFilmNow ..> FilmNow
+MainFilmNow ..> FilmNow
+MainFilmNow ..> Filme
+
+FilmNow -[hidden]d-> MainFilmNow
+FilmNow -[hidden]u-> LeitorFilmNow
+@enduml
