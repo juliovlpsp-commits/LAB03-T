@@ -48,16 +48,22 @@ public class FilmNow {
      * @param nome    nome do filme
      * @param ano     ano de lancamento do filme
      * @param local   local onde o filme pode ser assistido
-     * @return true se o filme foi adicionado false se ja existia um filme igual
+     * @return true se o filme foi adicionado false se a posicao e invalida ou ja existe um filme igual em outra posicao
      */
     public boolean cadastraFilme(int posicao, String nome, String ano, String local) {
+        if (posicao < 1 || posicao > this.filmes.length) {
+            return false;
+        }
+
         Filme novoFilme = new Filme(nome, ano, local);
-        for (Filme filme : this.filmes) {
-            if (filme != null && filme.equals(novoFilme)) {
+        int indiceDestino = posicao - 1;
+        for (int i = 0; i < this.filmes.length; i++) {
+            Filme filme = this.filmes[i];
+            if (i != indiceDestino && filme != null && filme.equals(novoFilme)) {
                 return false;
             }
         }
-        this.filmes[posicao - 1] = novoFilme;
+        this.filmes[indiceDestino] = novoFilme;
         return true;
     }
 

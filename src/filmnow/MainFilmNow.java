@@ -114,7 +114,7 @@ public class MainFilmNow {
      * @param fn      o sistema filmnow a ser manipulado
      * @param scanner scanner para capturar qual filme
      */
-    private static void detalharFilme(FilmNow fn, Scanner scanner) {
+    static void detalharFilme(FilmNow fn, Scanner scanner) {
         System.out.print("\nFilme> ");
         int posicao = leInteiro(scanner.nextLine());
         if (posicao < 1 || posicao > QUANTIDADE_FILMES) {
@@ -147,7 +147,7 @@ public class MainFilmNow {
      * @param fn      o sistema filmnow a ser manipulado
      * @param scanner scanner para pedir informacoes do filme
      */
-    private static void adicionaFilme(FilmNow fn, Scanner scanner) {
+    static void adicionaFilme(FilmNow fn, Scanner scanner) {
         System.out.print("\nPosição> ");
         int posicao = leInteiro(scanner.nextLine());
         if (posicao < 1 || posicao > QUANTIDADE_FILMES) {
