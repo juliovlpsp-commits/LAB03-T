@@ -74,6 +74,9 @@ public class Filme {
      */
     @Override
     public String toString() {
+        if (this.ano == null || this.ano.isEmpty()) {
+            return this.nome;
+        }
         return this.nome + ", " + this.ano;
     }
 }

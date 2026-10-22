@@ -123,7 +123,6 @@ public class MainFilmNow {
         }
         Filme filme = fn.getFilme(posicao);
         if (filme == null) {
-            System.out.println("POSIÇÃO INVÁLIDA!");
             return;
         }
 
@@ -169,7 +168,7 @@ public class MainFilmNow {
         }
 
         if (!fn.cadastraFilme(posicao, nome, ano, local)) {
-            System.out.println("FILME JA ADICIONADO");
+            System.out.println("FILME JÁ ADICIONADO");
             return;
         }
 

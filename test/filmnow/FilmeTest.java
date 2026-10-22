@@ -9,6 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FilmeTest {
 
     @Test
+    public void testNomeAnoSemAno() {
+        Filme filme = new Filme("20 dias em Mariupol", "", "Cinema");
+
+        assertEquals("20 dias em Mariupol", filme.toString());
+    }
+
+    @Test
     public void testEqualsMesmoFilme() {
         Filme filme1 = new Filme("Anatomia de uma Queda", "2023", "Cinema");
         Filme filme2 = new Filme("Anatomia de uma Queda", "2023", "Popcornflix");

@@ -1,55 +1,56 @@
-# Plano de Testes - FilmNow
+# Plano de testes - FilmNow
 
-Plano de testes de unidade da Etapa 3 (verificação e validação) do Laboratório 3.
-Framework: **JUnit 5**. Comando: `.\runtests.bat` (ou `./runtests.ps1`).
+Plano de testes de unidade da Etapa 3 de verificacao e validacao.
+Framework: **JUnit 5**. Comando: `runtests.bat` (Windows) ou `./runtests.ps1`.
 
 ## Escopo
 
-Testar o comportamento das classes `Filme` e `FilmNow`, sem depender da interface
-de texto (`MainFilmNow`) nem do carregamento de csv (`LeitorFilmNow`).
+Os testes cobrem o comportamento de `Filme`, `FilmNow` e as mensagens de entrada e saida das funcionalidades especificadas em `MainFilmNow`.
 
 ## Casos de teste - FilmeTest
 
-| id  | cenário | resultado esperado |
+| id | cenario | resultado esperado |
 | --- | --- | --- |
-| FT1 | dois filmes com mesmo nome e ano (locais diferentes) | são iguais |
-| FT2 | dois filmes com nome diferente | são diferentes |
-| FT3 | dois filmes com mesmo nome e ano diferente | são diferentes |
-| FT4 | filme comparado com uma String | são diferentes |
-| FT5 | filme comparado com null | são diferentes |
-| FT6 | filme comparado consigo mesmo | são iguais |
-| FT7 | toString de um filme | `nome, ano` |
-| FT8 | getters de um filme | devolvem nome, ano e local |
+| FT1 | filmes com mesmo nome e ano e locais diferentes | sao iguais |
+| FT2 | filmes com nomes diferentes | sao diferentes |
+| FT3 | mesmo nome e anos diferentes | sao diferentes |
+| FT4 | filme comparado com String | sao diferentes |
+| FT5 | filme comparado com null | sao diferentes |
+| FT6 | filme comparado consigo mesmo | sao iguais |
+| FT7 | representacao de filme com ano | nome e ano separados por virgula |
+| FT8 | representacao de filme sem ano | apenas o nome |
+| FT9 | getters | devolvem nome, ano e local |
 
 ## Casos de teste - FilmNowTest
 
-| id  | cenário | resultado esperado |
+| id | cenario | resultado esperado |
 | --- | --- | --- |
-| FN1 | getFilmes de um sistema novo | array de 100 posições vazio |
-| FN2 | getFilme em posição vazia | null |
-| FN3 | cadastraFilme válido | retorna true e o filme fica na posição |
-| FN4 | cadastraFilme repetido (mesma posição) | retorna false |
-| FN5 | cadastraFilme repetido (outra posição) | retorna false e a posição continua vazia |
-| FN6 | cadastraFilme em posição ocupada | sobrescreve o filme anterior |
-| FN7 | adicionaHot em posição livre | filme fica na hotlist |
-| FN8 | contemHot para filme fora da hotlist | false |
-| FN9 | removeHot | filme deixa de estar na hotlist |
-| FN10 | adicionaHot do mesmo filme em outra posição | aparece uma única vez |
-| FN11 | adicionaHot em posição ocupada | o antigo deixa de ser hot |
-| FN12 | listaHots com um filme | `1 - nome, ano` |
-| FN13 | listaHots vazia | string vazia |
+| FN1 | sistema novo | array de 100 posicoes vazio |
+| FN2 | leitura de posicao vazia | null |
+| FN3 | cadastro valido | sucesso e filme armazenado |
+| FN4 | cadastro duplicado | falha |
+| FN5 | cadastro duplicado em outra posicao | falha e posicao permanece vazia |
+| FN6 | cadastro em posicao ocupada com filme diferente | substitui o filme anterior |
+| FN7 | cadastro na posicao limite 100 | sucesso |
+| FN8 | cadastro nas posicoes 0 e 101 pelo sistema | mensagem de posicao invalida |
+| FN9 | cadastro com nome ou local vazio pelo sistema | mensagem de filme invalido |
+| FN10 | cadastro repetido pelo sistema | mensagem de filme ja adicionado |
+| FN11 | cadastro com ano vazio | filme aceito |
+| FN12 | detalhamento com todos os dados | nome, ano e local |
+| FN13 | detalhamento sem ano | apenas nome e local |
+| FN14 | detalhamento de posicao vazia | nenhuma mensagem adicional |
+| FN15 | detalhamento nas posicoes 0 e 101 | mensagem de posicao invalida |
+| FN16 | detalhamento de filme na HotList | representacao com 🔥, nome, ano e local |
+| FN17 | adicionaHot em posicao livre | filme fica na HotList |
+| FN18 | contemHot para filme ausente | false |
+| FN19 | removeHot | filme deixa de estar na HotList |
+| FN20 | mesmo filme adicionado em outra posicao HotList | aparece apenas uma vez |
+| FN21 | nova atribuicao a posicao HotList ocupada | filme anterior deixa de ser hot |
+| FN22 | listaHots com filme | posicao e representacao do filme |
+| FN23 | listaHots vazia | string vazia |
 
-## Comandos
+## Execucao
 
-Usa o `junit-platform-console-standalone` (baixado como `junit.jar`):
-
-```
-# Windows
-.\runtests.bat
-
-# Linux/Mac
-./runtests.ps1
-```
-
-O `junit.jar` é baixado automaticamente na primeira execução e fica fora do git
-(`.gitignore`). Os testes ficam em `test/filmnow/`.
+O projeto usa o `junit-platform-console-standalone` disponibilizado como `junit.jar`.
+O arquivo e baixado automaticamente na primeira execucao e nao e versionado.
+Os testes estao em `test/filmnow/`.
