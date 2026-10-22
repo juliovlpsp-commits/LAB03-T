@@ -2,9 +2,7 @@ package filmnow;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import org.junit.jupiter.api.Test;
@@ -15,33 +13,29 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class FilmNowTest {
 
-    private String executaComando(FilmNow fn, String nomeMetodo, String entrada) throws Exception {
-        Method metodo = MainFilmNow.class.getDeclaredMethod(nomeMetodo, FilmNow.class, Scanner.class);
-        metodo.setAccessible(true);
-        InputStream entradaOriginal = System.in;
-        PrintStream saidaOriginal = System.out;
+    private String executaComando(String opcao, FilmNow fn, String entrada) {
+        Scanner scanner = new Scanner(new ByteArrayInputStream(entrada.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8.name());
         ByteArrayOutputStream saida = new ByteArrayOutputStream();
+        PrintStream saidaOriginal = System.out;
         try {
-            System.setIn(new ByteArrayInputStream(entrada.getBytes(StandardCharsets.UTF_8)));
-            System.setOut(new PrintStream(saida, true, StandardCharsets.UTF_8.name()));
-            metodo.invoke(null, fn, new Scanner(System.in, StandardCharsets.UTF_8.name()));
+            System.setOut(new PrintStream(saida, true, StandardCharsets.UTF_8));
+            MainFilmNow.comando(opcao, fn, scanner);
         } finally {
-            System.setIn(entradaOriginal);
             System.setOut(saidaOriginal);
         }
-        return saida.toString(StandardCharsets.UTF_8.name()).replace("\r\n", "\n");
+        return saida.toString(StandardCharsets.UTF_8).replace("\r\n", "\n");
     }
 
-    private String executaAdicao(FilmNow fn, String entrada) throws Exception {
-        return executaComando(fn, "adicionaFilme", entrada);
+    private String executaAdicao(FilmNow fn, String entrada) {
+        return executaComando("A", fn, entrada);
     }
 
-    private String executaDetalhamento(FilmNow fn, String entrada) throws Exception {
-        return executaComando(fn, "detalharFilme", entrada);
+    private String executaDetalhamento(FilmNow fn, String entrada) {
+        return executaComando("D", fn, entrada);
     }
 
     @Test
-    public void testAdicionaFilmeEmPosicaoVazia() throws Exception {
+    public void testAdicionaFilmeEmPosicaoVazia() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "1\nAvatar\n2009\nDisney+\n").contains("FILME ADICIONADO"));
@@ -49,7 +43,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeEmPosicaoExistente() throws Exception {
+    public void testAdicionaFilmeEmPosicaoExistente() {
         FilmNow fn = new FilmNow();
         fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
 
@@ -58,7 +52,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeDuplicadoEmOutraPosicao() throws Exception {
+    public void testAdicionaFilmeDuplicadoEmOutraPosicao() {
         FilmNow fn = new FilmNow();
         fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
 
@@ -67,7 +61,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaMesmoNomeEAnoComLocalDiferente() throws Exception {
+    public void testAdicionaMesmoNomeEAnoComLocalDiferente() {
         FilmNow fn = new FilmNow();
         fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
 
@@ -76,7 +70,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeNaPosicaoLimite() throws Exception {
+    public void testAdicionaFilmeNaPosicaoLimite() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "100\nAvatar\n2009\nDisney+\n").contains("FILME ADICIONADO"));
@@ -84,7 +78,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeAcimaDoLimite() throws Exception {
+    public void testAdicionaFilmeAcimaDoLimite() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "101\n").contains("POSIÇÃO INVÁLIDA"));
@@ -92,7 +86,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeAbaixoDoLimite() throws Exception {
+    public void testAdicionaFilmeAbaixoDoLimite() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "0\n").contains("POSIÇÃO INVÁLIDA"));
@@ -100,7 +94,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeComLocalVazio() throws Exception {
+    public void testAdicionaFilmeComLocalVazio() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "1\n20 dias em Mariupol\n2023\n\n").contains("FILME INVALIDO"));
@@ -108,7 +102,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeComAnoVazio() throws Exception {
+    public void testAdicionaFilmeComAnoVazio() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "1\n20 dias em Mariupol\n\nCinema\n").contains("FILME ADICIONADO"));
@@ -116,7 +110,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testAdicionaFilmeComNomeVazio() throws Exception {
+    public void testAdicionaFilmeComNomeVazio() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaAdicao(fn, "1\n\n2023\nCinema\n").contains("FILME INVALIDO"));
@@ -124,7 +118,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testDetalhaFilmeComTodosOsDados() throws Exception {
+    public void testDetalhaFilmeComTodosOsDados() {
         FilmNow fn = new FilmNow();
         fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
 
@@ -132,7 +126,7 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testDetalhaFilmeSemAno() throws Exception {
+    public void testDetalhaFilmeSemAno() {
         FilmNow fn = new FilmNow();
         fn.cadastraFilme(1, "20 dias em Mariupol", "", "Cinema");
 
@@ -140,33 +134,78 @@ public class FilmNowTest {
     }
 
     @Test
-    public void testDetalhaPosicaoSemFilme() throws Exception {
+    public void testDetalhaPosicaoSemFilme() {
         FilmNow fn = new FilmNow();
 
         assertEquals("\nFilme> ", executaDetalhamento(fn, "100\n"));
     }
 
     @Test
-    public void testDetalhaPosicaoAbaixoDoLimite() throws Exception {
+    public void testDetalhaPosicaoAbaixoDoLimite() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaDetalhamento(fn, "0\n").contains("POSIÇÃO INVÁLIDA!"));
     }
 
     @Test
-    public void testDetalhaPosicaoAcimaDoLimite() throws Exception {
+    public void testDetalhaPosicaoAcimaDoLimite() {
         FilmNow fn = new FilmNow();
 
         assertTrue(executaDetalhamento(fn, "101\n").contains("POSIÇÃO INVÁLIDA!"));
     }
 
     @Test
-    public void testDetalhaFilmeDaHotList() throws Exception {
+    public void testDetalhaFilmeDaHotList() {
         FilmNow fn = new FilmNow();
         fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
         fn.adicionaHot(fn.getFilme(1), 1);
 
         assertEquals("\nFilme> 🔥 Avatar, 2009\nDisney+\n", executaDetalhamento(fn, "1\n"));
+    }
+
+    @Test
+    public void testMostrarFilmes() {
+        FilmNow fn = new FilmNow();
+        fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
+        fn.cadastraFilme(4, "Shrek 2", "2004", "Netflix");
+
+        String saida = executaComando("M", fn, "");
+
+        assertTrue(saida.contains("1 - Avatar"));
+        assertTrue(saida.contains("4 - Shrek 2"));
+        assertFalse(saida.contains("2 - "));
+    }
+
+    @Test
+    public void testExibirHotList() {
+        FilmNow fn = new FilmNow();
+        fn.adicionaHot(new Filme("Avatar", "2009", "Disney+"), 2);
+
+        String saida = executaComando("E", fn, "");
+
+        assertTrue(saida.contains("2 - Avatar, 2009"));
+    }
+
+    @Test
+    public void testAtribuirHotList() {
+        FilmNow fn = new FilmNow();
+        fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
+
+        executaComando("H", fn, "1\n3\n");
+
+        assertTrue(fn.contemHot(fn.getFilme(1)));
+        assertTrue(fn.listaHots().contains("3 - Avatar, 2009"));
+    }
+
+    @Test
+    public void testRemoverHotList() {
+        FilmNow fn = new FilmNow();
+        fn.cadastraFilme(1, "Avatar", "2009", "Disney+");
+        fn.adicionaHot(fn.getFilme(1), 3);
+
+        executaComando("R", fn, "3\n");
+
+        assertFalse(fn.contemHot(fn.getFilme(1)));
     }
 
     @Test

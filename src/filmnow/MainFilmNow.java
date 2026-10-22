@@ -65,7 +65,7 @@ public class MainFilmNow {
      * @param fn      o sistema filmnow que estamos manipulando
      * @param scanner objeto scanner para o caso do comando precisar de mais input
      */
-    private static void comando(String opcao, FilmNow fn, Scanner scanner) {
+    static void comando(String opcao, FilmNow fn, Scanner scanner) {
         switch (opcao) {
             case "A":
                 adicionaFilme(fn, scanner);

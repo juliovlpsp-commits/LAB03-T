@@ -1,56 +1,48 @@
 # Plano de testes - FilmNow
 
-Plano de testes de unidade da Etapa 3 de verificacao e validacao.
-Framework: **JUnit 5**. Comando: `runtests.bat` (Windows) ou `./runtests.ps1`.
+Plano de testes de unidade da Etapa 3 de verificacao e validacao, executados com JUnit 5 por `runtests.bat`.
 
-## Escopo
+## FilmeTest
 
-Os testes cobrem o comportamento de `Filme`, `FilmNow` e as mensagens de entrada e saida das funcionalidades especificadas em `MainFilmNow`.
-
-## Casos de teste - FilmeTest
-
-| id | cenario | resultado esperado |
+| caso | entrada ou situacao | resultado esperado |
 | --- | --- | --- |
-| FT1 | filmes com mesmo nome e ano e locais diferentes | sao iguais |
-| FT2 | filmes com nomes diferentes | sao diferentes |
-| FT3 | mesmo nome e anos diferentes | sao diferentes |
-| FT4 | filme comparado com String | sao diferentes |
-| FT5 | filme comparado com null | sao diferentes |
-| FT6 | filme comparado consigo mesmo | sao iguais |
-| FT7 | representacao de filme com ano | nome e ano separados por virgula |
-| FT8 | representacao de filme sem ano | apenas o nome |
-| FT9 | getters | devolvem nome, ano e local |
+| igualdade | mesmo nome e ano com locais diferentes | filmes iguais |
+| desigualdade | nome ou ano diferente | filmes diferentes |
+| comparacoes | String, null e o proprio objeto | resultado de igualdade correto |
+| representacao com ano | nome e ano preenchidos | `nome, ano` |
+| representacao sem ano | ano vazio | somente o nome |
+| getters | filme criado com os tres dados | valores correspondentes |
 
-## Casos de teste - FilmNowTest
+## FilmNowTest - adicionar filme
 
-| id | cenario | resultado esperado |
+| caso | entrada ou situacao | resultado esperado |
 | --- | --- | --- |
-| FN1 | sistema novo | array de 100 posicoes vazio |
-| FN2 | leitura de posicao vazia | null |
-| FN3 | cadastro valido | sucesso e filme armazenado |
-| FN4 | cadastro duplicado | falha |
-| FN5 | cadastro duplicado em outra posicao | falha e posicao permanece vazia |
-| FN6 | cadastro em posicao ocupada com filme diferente | substitui o filme anterior |
-| FN7 | cadastro na posicao limite 100 | sucesso |
-| FN8 | cadastro nas posicoes 0 e 101 pelo sistema | mensagem de posicao invalida |
-| FN9 | cadastro com nome ou local vazio pelo sistema | mensagem de filme invalido |
-| FN10 | cadastro repetido pelo sistema | mensagem de filme ja adicionado |
-| FN11 | cadastro com ano vazio | filme aceito |
-| FN12 | detalhamento com todos os dados | nome, ano e local |
-| FN13 | detalhamento sem ano | apenas nome e local |
-| FN14 | detalhamento de posicao vazia | nenhuma mensagem adicional |
-| FN15 | detalhamento nas posicoes 0 e 101 | mensagem de posicao invalida |
-| FN16 | detalhamento de filme na HotList | representacao com 🔥, nome, ano e local |
-| FN17 | adicionaHot em posicao livre | filme fica na HotList |
-| FN18 | contemHot para filme ausente | false |
-| FN19 | removeHot | filme deixa de estar na HotList |
-| FN20 | mesmo filme adicionado em outra posicao HotList | aparece apenas uma vez |
-| FN21 | nova atribuicao a posicao HotList ocupada | filme anterior deixa de ser hot |
-| FN22 | listaHots com filme | posicao e representacao do filme |
-| FN23 | listaHots vazia | string vazia |
+| posicao vazia | Avatar, 2009, Disney+ na posicao 1 | filme cadastrado e mensagem `FILME ADICIONADO` |
+| posicao ocupada | novo filme na posicao 1 | substitui o anterior e informa sucesso |
+| duplicado em outra posicao | Avatar repetido na posicao 3 | nao cadastra e informa `FILME JA ADICIONADO` |
+| mesmo nome e ano, local diferente | Avatar/2009/Popcornflix na posicao 3 | nao cadastra |
+| limite superior | novo filme na posicao 100 | cadastra com sucesso |
+| acima do limite | posicao 101 | `POSICAO INVALIDA` |
+| abaixo do limite | posicao 0 | `POSICAO INVALIDA` |
+| local vazio | local em branco | `FILME INVALIDO` e nao cadastra |
+| ano vazio | ano em branco | cadastra com sucesso |
+| nome vazio | nome em branco | `FILME INVALIDO` e nao cadastra |
+
+## FilmNowTest - detalhar filme
+
+| caso | entrada ou situacao | resultado esperado |
+| --- | --- | --- |
+| todos os dados | Avatar/2009/Disney+ na posicao 1 | nome, ano e local |
+| sem ano | 20 dias em Mariupol, ano vazio, Cinema | nome e local, sem virgula sobrando |
+| posicao vazia | posicao 100 sem filme | nenhuma mensagem adicional |
+| abaixo do limite | posicao 0 | `POSICAO INVALIDA` |
+| acima do limite | posicao 101 | `POSICAO INVALIDA` |
+| filme na HotList | Avatar marcado como hot | `🔥 Avatar, 2009` e local |
+
+## Outras funcionalidades de FilmNow
+
+Os testes adicionais cobrem mostrar filmes cadastrados, atribuir/remover/exibir itens da HotList, unicidade de filme na HotList e consulta de filmes presentes ou ausentes.
 
 ## Execucao
 
-O projeto usa o `junit-platform-console-standalone` disponibilizado como `junit.jar`.
-O arquivo e baixado automaticamente na primeira execucao e nao e versionado.
-Os testes estao em `test/filmnow/`.
+Execute `runtests.bat` no Windows. O script compila o codigo de producao e os testes e executa a suite JUnit 5 usando `junit.jar`, baixado automaticamente se necessario. Os testes ficam em `test/filmnow/`.
